@@ -346,7 +346,7 @@ void delete_emp_details()
 
             if (search_id==emp_id)
             {
-                cout<<"\n Emplooy Data Delete Sucssesfully";
+                cout<<"\n Emplooy Data Deleted Sucssesfully";
             }
             else
             {
