@@ -18,6 +18,7 @@ void delete_emp_details();
 // Admin In Customer Details And other Function
 
 void show_all_customer_data();
+void update_customer_data();
 
 // Admin Main Function Part
 void admin_check_details();
@@ -50,6 +51,26 @@ public:
 };
 class customer
 {
+public:
+    int customer_id;
+    string customer_name;
+
+    void add_customer_data()
+    {
+        write_data.open("customer.txt", ios::app);
+
+        cout << "\n Enter Your Customer Id ";
+        cin >> customer_id;
+
+        cout << "\n Enter Your Customer Full Name ";
+        cin.ignore();
+        getline(cin, customer_name);
+
+        write_data << "Customer Id = " << customer_id << endl;
+        write_data << "Customer Name = " << customer_name << endl;
+
+        write_data.close();
+    }
 };
 class emp
 {
@@ -118,7 +139,7 @@ void admin_check_details()
 void show_admin_details_menu()
 {
     admin a1;
-
+    customer c1;
     admin_check_details();
 
     if (flag == 1)
@@ -156,6 +177,14 @@ void show_admin_details_menu()
             case 5:
                 system("cls");
                 delete_emp_details();
+                break;
+            case 6:
+                system("cls");
+                c1.add_customer_data();
+                break;
+            case 7:
+                system("cls");
+                update_customer_data();
                 break;
             case 11:
                 system("cls");
@@ -293,7 +322,7 @@ void search_emp()
                 getline(read_data, full_name);
                 getline(read_data, salary);
                 getline(read_data, pf);
-               // getline(read_data, mobile_number);
+                // getline(read_data, mobile_number);
                 if (emp_id == search_id)
                 {
                     cout << "\n======== Employee Found Data =========" << endl;
@@ -344,16 +373,16 @@ void delete_emp_details()
             getline(read_data, salary);
             getline(read_data, pf);
 
-            if (search_id==emp_id)
+            if (search_id == emp_id)
             {
-                cout<<"\n Emplooy Data Deleted Sucssesfully";
+                cout << "\n Emplooy Data Deleted Sucssesfully";
             }
             else
             {
-                temp_file << emp_id <<endl;
-                temp_file << full_name <<endl;
-                temp_file << salary <<endl;
-                temp_file << pf <<endl;
+                temp_file << emp_id << endl;
+                temp_file << full_name << endl;
+                temp_file << salary << endl;
+                temp_file << pf << endl;
             }
         }
     }
@@ -384,5 +413,61 @@ void show_all_customer_data()
     else
     {
         cout << "\n Get lost.....";
+    }
+}
+
+void update_customer_data()
+{
+    customer c1;
+    read_data.open("customer.txt", ios::in);
+    write_data.open("customer_update.txt", ios::app);
+    int customer_id, cus_id, f = 1, c_id;
+    string name;
+
+    cout << "\n Enter Your Customer Searching Id ";
+    cin >> customer_id;
+
+    while (getline(read_data, line))
+    {
+        if (line.find("Customer Id = ") != string::npos)
+        {
+            cus_id = stoi(line.substr(line.find("=") + 1));
+            getline(read_data, name);
+
+            if (cus_id == customer_id)
+            {
+
+                cout << "\n Updated Menu ";
+                cout << "\n 1. Update Customer Id ";
+                cout << "\n 2. Update Customer Name ";
+                cout << "\n 3. Update Customer Mobile Number";
+
+                cout << "\n Enter Your Choice";
+                cin >> ch;
+
+                switch (ch)
+                {
+                case 1:
+                    cout << "\n Enter Customer Id ";
+                    cin >> cus_id;
+                    break;
+
+                default:
+                    cout << "\n Invalide Choice ";
+                    break;
+                }
+            }
+            else
+            {
+                f = 0;
+            }
+            write_data << "Customer Id = " << cus_id << endl;
+            write_data << name << endl;
+        }
+    }
+
+    if (f == 0)
+    {
+        cout << "\n Data Not Found";
     }
 }
