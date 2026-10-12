@@ -4,7 +4,7 @@ using namespace std;
 int flag = 0, ch; // checking admin details
 float salary, pf;
 long long int mobile_number;
-string line;
+string line, line1;
 // FILE MAGMENT SYSTEM
 
 ofstream write_data;
@@ -43,10 +43,8 @@ public:
         cout << "\n  5. See All Customer Details ";
         cout << "\n  6. Update Customer Data";
         cout << "\n  7. See The Last Year Financial Report";
-        cout << "\n  8. Opning Account Public ";
-        cout << "\n  9. Opning Account Private ";
-        cout << "\n  10. Fund Details"; // bija 3 menu baki che banavana 1 report and 2 total 3.Profit And Lost
-        cout << "\n  11. Logout";
+        cout << "\n  8. Fund Details"; // bija 3 menu baki che banavana 1 report and 2 total 3.Profit And Lost
+        cout << "\n  9. Logout";
     }
 };
 class customer
@@ -295,7 +293,7 @@ void search_emp()
     admin_check_details();
 
     int search_id, emp_id;
-    string line, full_name, salary, pf;
+    string full_name, salary, pf;
     bool found = false;
     long long int mobile_number;
     if (flag == 1)
@@ -309,12 +307,14 @@ void search_emp()
         }
         cout << "\n Enter Employee ID To Search: ";
         cin >> search_id;
-        while (getline(read_data, line))
+        while (getline(read_data, line),getline(read_data, line1))
         {
 
-            if (line.find("Emplooye ID = ") != string::npos) // the Emplooye ID is Found Than Goto Under If
+            if (line.find("Emplooye ID = ") != string::npos || line.find("Emplooye Mobile Number = ") != string::npos) // the Emplooye ID is Found Than Goto Under If
             {
+
                 emp_id = stoi(line.substr(line.find("=") + 1));
+                mobile_number = stoll(line.substr(line.find("=") + 1));
                 // this code convert the strin data into integer data
                 // stoi convert a string value into interger
                 // line.substr is distribut the part after the = part
@@ -326,10 +326,12 @@ void search_emp()
                 if (emp_id == search_id)
                 {
                     cout << "\n======== Employee Found Data =========" << endl;
+
                     cout << line << endl;
                     cout << full_name << endl;
                     cout << salary << endl;
                     cout << pf << endl;
+
                     cout << "\n ========================================";
                     found = true;
                     break;
@@ -364,25 +366,31 @@ void delete_emp_details()
     cout << "\n Enter Your Emplooye Id You Want To Deleted It ";
     cin >> search_id;
 
-    while (getline(read_data, line))
+    while (getline(read_data, line),getline(read_data, line1))
     {
-        if (line.find("Emplooye ID = ") != string::npos)
-        {
-            emp_id = stoi(line.substr(line.find("=") + 1));
-            getline(read_data, full_name);
-            getline(read_data, salary);
-            getline(read_data, pf);
+       if (line.find("Emplooye ID = ") != string::npos || line.find("Emplooye Mobile Number = ") != string::npos) // the Emplooye ID is Found Than Goto Under If
+            {
 
+                emp_id = stoi(line.substr(line.find("=") + 1));
+                mobile_number = stoll(line.substr(line.find("=") + 1));
+                // this code convert the strin data into integer data
+                // stoi convert a string value into interger
+                // line.substr is distribut the part after the = part
+                // and add 1 to move the pointer Emp Id = to 1001
+                getline(read_data, full_name);
+                getline(read_data, salary);
+                getline(read_data, pf);
             if (search_id == emp_id)
             {
                 cout << "\n Emplooy Data Deleted Sucssesfully";
             }
             else
             {
-                temp_file << emp_id << endl;
+                temp_file << line << endl;
                 temp_file << full_name << endl;
                 temp_file << salary << endl;
                 temp_file << pf << endl;
+                
             }
         }
     }
@@ -429,7 +437,7 @@ void update_customer_data()
 
     while (getline(read_data, line))
     {
-        if (line.find("Customer Id = ") != string::npos)
+        if (line.find("Customer Id = ") != string::npos || line1.find("Emplooye Mobile Number =") != string::npos)
         {
             cus_id = stoi(line.substr(line.find("=") + 1));
             getline(read_data, name);
@@ -439,7 +447,6 @@ void update_customer_data()
 
                 cout << "\n Updated Menu ";
                 cout << "\n 1. Update Customer Id ";
-                cout << "\n 2. Update Customer Name ";
                 cout << "\n 3. Update Customer Mobile Number";
 
                 cout << "\n Enter Your Choice";
