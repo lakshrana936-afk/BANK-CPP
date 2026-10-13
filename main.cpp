@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 int flag = 0, ch; // checking admin details
 float salary, pf;
@@ -25,6 +26,10 @@ void delete_emp_details();
 
 void show_all_customer_data();
 void update_customer_data();
+
+// Admin In Financial Report Part
+
+void last_year_report();
 
 // Admin Main Function Part
 void admin_check_details();
@@ -166,11 +171,14 @@ void show_admin_details_menu()
                 system("cls");
                 show_all_customer_data();
                 break;
-            case 7:
+            case 6:
                 system("cls");
                 update_customer_data();
                 break;
-
+            case 7:
+                system("cls");
+                last_year_report();
+                break;
             case 11:
                 system("cls");
                 cout << "\n BACK TO MAIN MENU ";
@@ -630,5 +638,41 @@ void add_customer_details()
     if (flag == 2)
     {
         cout << "\n Get Lost ....";
+    }
+}
+
+void last_year_report()
+{
+    admin_check_details();
+
+    if (flag == 1)
+    {
+
+        cout << "\n";
+        cout << "====================================================\n";
+        cout << "              BANK OF BARODA\n";
+        cout << "           FINANCIAL REPORT 2025-26\n";
+        cout << "====================================================\n";
+        cout << "\n              BANK SUMMARY\n";
+        cout << "----------------------------------------------------\n";
+        cout << "\n Total Customers " << setw(20) << ":" << setw(13) << 12700;
+        cout << "\n Total Employees " << setw(20) << ":" << setw(13) << 500;
+        cout << "\n Total Deposits  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 850000000.00;
+        cout << "\n Total Withdeawals  " << setw(17) << ":" << setw(4) << "RS." << setw(3) << 420000000.00;
+        cout << "\n Total Loans " << setw(24) << ":" << setw(4) << "RS." << setw(3) << 125000000.00;
+        cout << "\n Total Interest Earned " << setw(14) << ":" << setw(4) << "RS." << setw(3) << 35000000.00;
+        cout << "\n ";
+        cout << "\n ";
+
+        cout << "\n                PROFIT SUMMARY                 ";
+        cout << "\n----------------------------------------------------";
+        cout << "\n Total Income  " << setw(22) << ":" << setw(4) << "RS." << setw(3) << 50000000.00;
+        cout << "\n Total Expenses  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 18000000.00;
+        cout << "\n Net Profit   " << setw(23) << ":" << setw(4) << "RS." << setw(3) << 32000000.00;
+        cout << "\n----------------------------------------------------";
+    }
+    if (flag == 2)
+    {
+        cout << "\n Get Lost ......";
     }
 }
