@@ -5,6 +5,12 @@ int flag = 0, ch; // checking admin details
 float salary, pf;
 long long int mobile_number;
 string line, line1;
+
+// CUSTOMER PART VARIABLES
+
+int pin, cus_id;
+float amount;
+string full_name, status;
 // FILE MAGMENT SYSTEM
 
 ofstream write_data;
@@ -23,6 +29,10 @@ void update_customer_data();
 // Admin Main Function Part
 void admin_check_details();
 void show_admin_details_menu();
+
+// CUSTOMER PART
+
+void add_customer_details();
 
 class admin
 {
@@ -49,26 +59,6 @@ public:
 };
 class customer
 {
-public:
-    int customer_id;
-    string customer_name;
-
-    void add_customer_data()
-    {
-        write_data.open("customer.txt", ios::app);
-
-        cout << "\n Enter Your Customer Id ";
-        cin >> customer_id;
-
-        cout << "\n Enter Your Customer Full Name ";
-        cin.ignore();
-        getline(cin, customer_name);
-
-        write_data << "Customer Id = " << customer_id << endl;
-        write_data << "Customer Name = " << customer_name << endl;
-
-        write_data.close();
-    }
 };
 class emp
 {
@@ -129,8 +119,7 @@ void admin_check_details()
     }
     else
     {
-        cout << "\n Getlost....";
-        return;
+        flag = 2;
     }
 }
 
@@ -170,20 +159,18 @@ void show_admin_details_menu()
                 break;
             case 4:
                 system("cls");
-                show_all_customer_data();
+                delete_emp_details();
+
                 break;
             case 5:
                 system("cls");
-                delete_emp_details();
-                break;
-            case 6:
-                system("cls");
-                c1.add_customer_data();
+                show_all_customer_data();
                 break;
             case 7:
                 system("cls");
                 update_customer_data();
                 break;
+
             case 11:
                 system("cls");
                 cout << "\n BACK TO MAIN MENU ";
@@ -204,11 +191,10 @@ void show_admin_details_menu()
 void show_emp_details()
 {
 
-    admin_check_details();
     int ch;
     string line; // read each each line in file
 
-    read_data.open("emp.txt");
+    read_data.open("emp.txt", ios::in);
 
     if (!read_data)
     {
@@ -216,23 +202,17 @@ void show_emp_details()
         return;
     }
 
-    if (flag == 1)
+    while (getline(read_data, line))
     {
+        cout << "\n " << line << endl;
+    }
 
-        while (getline(read_data, line))
-        {
-            cout << "\n " << line << endl;
-        }
-        read_data.close();
-    }
-    else
-    {
-        cout << " Get Lost..";
-    }
+    read_data.close();
 }
 
 void add_emp_details()
 {
+
     admin_check_details();
 
     write_data.open("emp.txt", ios::app);
@@ -248,7 +228,6 @@ void add_emp_details()
 
     if (flag == 1)
     {
-
         cout << "\n Enter Emplooye Id ";
         cin >> emp_id;
 
@@ -280,22 +259,25 @@ void add_emp_details()
         {
             write_data << "Emplooye Mobile Number = " << mobile_number << endl;
         }
+    }
 
-        write_data.close();
-    }
-    else
+    if (flag == 2)
     {
-        cout << "\n Getlost...";
+        cout << "\n Get lost........";
     }
+
+    write_data.close();
 }
+
 void search_emp()
 {
     admin_check_details();
 
     int search_id, emp_id;
-    string full_name, salary, pf;
+    string full_name, salary, pf, mobile_line;
     bool found = false;
     long long int mobile_number;
+
     if (flag == 1)
     {
         read_data.open("emp.txt", ios::in);
@@ -305,16 +287,18 @@ void search_emp()
             cout << "\n File Not Found!";
             return;
         }
+
         cout << "\n Enter Employee ID To Search: ";
         cin >> search_id;
-        while (getline(read_data, line),getline(read_data, line1))
+
+        while (getline(read_data, line), getline(read_data, line1))
         {
 
-            if (line.find("Emplooye ID = ") != string::npos || line.find("Emplooye Mobile Number = ") != string::npos) // the Emplooye ID is Found Than Goto Under If
+            if (line.find("Emplooye ID = ") != string::npos) // the Emplooye ID is Found Than Goto Under If
             {
 
                 emp_id = stoi(line.substr(line.find("=") + 1));
-                mobile_number = stoll(line.substr(line.find("=") + 1));
+
                 // this code convert the strin data into integer data
                 // stoi convert a string value into interger
                 // line.substr is distribut the part after the = part
@@ -322,17 +306,19 @@ void search_emp()
                 getline(read_data, full_name);
                 getline(read_data, salary);
                 getline(read_data, pf);
-                // getline(read_data, mobile_number);
+                getline(read_data, mobile_line);
+
                 if (emp_id == search_id)
                 {
-                    cout << "\n======== Employee Found Data =========" << endl;
+                    cout << "\n= = = = Employee Found Data = = = =" << endl;
 
                     cout << line << endl;
                     cout << full_name << endl;
                     cout << salary << endl;
                     cout << pf << endl;
+                    cout << mobile_line << endl;
 
-                    cout << "\n ========================================";
+                    cout << "\n = = = = = = = = = = = = = = = = = = = ";
                     found = true;
                     break;
                 }
@@ -346,9 +332,10 @@ void search_emp()
             cout << "\n Data Not Found In The Data Base";
         }
     }
-    else
+
+    if (flag == 2)
     {
-        cout << "\n Getlost...";
+        cout << "\n get lost ......";
     }
 }
 void delete_emp_details()
@@ -357,49 +344,78 @@ void delete_emp_details()
     read_data.open("emp.txt", ios::in);
     ofstream temp_file;
 
-    temp_file.open("temp.txt");
+    temp_file.open("temp.txt", ios::app);
 
     int search_id, emp_id;
-    string line, full_name, salary, pf;
+    string line, full_name, salary, pf, mobile_line;
     bool found = false;
 
     cout << "\n Enter Your Emplooye Id You Want To Deleted It ";
     cin >> search_id;
 
-    while (getline(read_data, line),getline(read_data, line1))
+    if (!read_data || !temp_file)
     {
-       if (line.find("Emplooye ID = ") != string::npos || line.find("Emplooye Mobile Number = ") != string::npos) // the Emplooye ID is Found Than Goto Under If
+        cout << "File Is Not Open ";
+        return;
+    }
+
+    if (flag == 1)
+    {
+
+        while (getline(read_data, line))
+        {
+
+            if (line.find("Emplooye ID = ") != string::npos) // the Emplooye ID is Found Than Goto Under If
             {
 
                 emp_id = stoi(line.substr(line.find("=") + 1));
-                mobile_number = stoll(line.substr(line.find("=") + 1));
-                // this code convert the strin data into integer data
-                // stoi convert a string value into interger
-                // line.substr is distribut the part after the = part
-                // and add 1 to move the pointer Emp Id = to 1001
+
                 getline(read_data, full_name);
                 getline(read_data, salary);
                 getline(read_data, pf);
-            if (search_id == emp_id)
-            {
-                cout << "\n Emplooy Data Deleted Sucssesfully";
-            }
-            else
-            {
-                temp_file << line << endl;
-                temp_file << full_name << endl;
-                temp_file << salary << endl;
-                temp_file << pf << endl;
-                
+                getline(read_data, mobile_line);
+
+                if (search_id != emp_id)
+                {
+                    temp_file << line << endl;
+                    temp_file << full_name << endl;
+                    temp_file << salary << endl;
+                    temp_file << pf << endl;
+                    temp_file << mobile_line << endl;
+                }
+                else
+                {
+                    cout << "\n Emplooye Data Found " << endl;
+
+                    cout << line << endl;
+                    cout << full_name << endl;
+                    cout << salary << endl;
+                    cout << mobile_line << endl;
+
+                    cout << "\n Data Deleted Successfully ";
+
+                    found = true;
+                }
             }
         }
+
+        if (found == false)
+        {
+            cout << "\n Data Not Found In Data Base ";
+        }
+
+        temp_file.close();
+        read_data.close();
+        remove("emp.txt");
+        rename("temp.txt", "emp.txt");
     }
 
-    temp_file.close();
-    read_data.close();
-    remove("emp.txt");
-    rename("temp.txt", "emp.txt");
+    if (flag == 2)
+    {
+        cout << "\n Get Lost .....";
+    }
 }
+
 // Admin In Customer Part
 
 void show_all_customer_data()
@@ -411,70 +427,208 @@ void show_all_customer_data()
     {
         read_data.open("customer.txt", ios::in);
 
-        cout << "\n====== ALL CUSTOMER DATA ====== " << endl;
+        cout << "\n= = = = ALL CUSTOMER DATA = = = = " << endl;
+
         while (getline(read_data, line))
         {
             cout << line << endl;
         }
-        cout << "\n ===============================";
+        cout << "\n = = = = = = = = = = = = = = = = = ";
+
+        read_data.close();
     }
-    else
+
+    if (flag == 2)
     {
-        cout << "\n Get lost.....";
+        cout << "\n Get Lost .....";
     }
 }
 
 void update_customer_data()
 {
-    customer c1;
+    admin_check_details();
+
     read_data.open("customer.txt", ios::in);
     write_data.open("customer_update.txt", ios::app);
-    int customer_id, cus_id, f = 1, c_id;
-    string name;
 
-    cout << "\n Enter Your Customer Searching Id ";
-    cin >> customer_id;
+    int customer_id, cus_id, choice;
+    string line, name, mobile_line, updatede_status;
+    bool found = false;
 
-    while (getline(read_data, line))
+    if (!read_data || !write_data)
     {
-        if (line.find("Customer Id = ") != string::npos || line1.find("Emplooye Mobile Number =") != string::npos)
+        cout << "\n File Not Found!";
+        return;
+    }
+
+    if (flag == 1)
+    {
+        cout << "\n Enter Customer Searching ID: ";
+        cin >> customer_id;
+
+        while (getline(read_data, line))
         {
-            cus_id = stoi(line.substr(line.find("=") + 1));
-            getline(read_data, name);
-
-            if (cus_id == customer_id)
+            if (line.find("Customer ID = ") != string::npos)
             {
+                cus_id = stoi(line.substr(line.find("=") + 1));
 
-                cout << "\n Updated Menu ";
-                cout << "\n 1. Update Customer Id ";
-                cout << "\n 3. Update Customer Mobile Number";
+                getline(read_data, name);
+                getline(read_data, mobile_line);
 
-                cout << "\n Enter Your Choice";
-                cin >> ch;
-
-                switch (ch)
+                if (cus_id == customer_id)
                 {
-                case 1:
-                    cout << "\n Enter Customer Id ";
-                    cin >> cus_id;
-                    break;
+                    found = true;
 
-                default:
-                    cout << "\n Invalide Choice ";
-                    break;
+                    cout << "\n Customer Found!";
+                    cout << "\n " << line;
+                    cout << "\n " << name;
+                    cout << "\n " << mobile_line;
+
+                    cout << "\n 1. Update Customer ID";
+                    cout << "\n 2. Update Customer Name";
+                    cout << "\n 3. Update Customer Mobile Number";
+                    cout << "\n 4. Update Customer Account Status";
+                    cout << "\n Enter Your Choice: ";
+                    cin >> choice;
+
+                    if (choice == 1)
+                    {
+                        cout << "\n Enter New Customer ID: ";
+                        cin >> cus_id;
+
+                        line = "Customer ID = " + to_string(cus_id);
+                    }
+                    else if (choice == 2)
+                    {
+                        cout << "\n Enter New Customer Name: ";
+                        cin.ignore();
+                        getline(cin, name);
+
+                        name = "Customer Name = " + name;
+                    }
+                    else if (choice == 3)
+                    {
+                        cout << "\n Enter New Mobile Number: ";
+                        cin >> mobile_number;
+
+                        if (mobile_number >= 1000000000LL && mobile_number <= 9999999999LL)
+                        {
+                            mobile_line = "Customer Mobile Number = " + to_string(mobile_number);
+                        }
+                        else
+                        {
+                            cout << "\n Invalid Mobile Number!";
+                        }
+                    }
+
+                    else if (choice == 4)
+                    {
+                        cout << "\n Enter The Updated Account Status (UnBlock , Block )";
+                        cin >> status;
+
+                        if (status == "Block" || status == "UnBlock")
+                        {
+                            updatede_status = "Customer Account Status = " + status;
+                        }
+                        else
+                        {
+                            cout << "\n User Entred Wrong Status ";
+                        }
+                    }
+                    else
+                    {
+                        cout << "\n Invalid Choice!";
+                    }
                 }
+
+                write_data << line << endl;
+                write_data << name << endl;
+                write_data << mobile_line << endl;
+                write_data << updatede_status << endl;
             }
-            else
-            {
-                f = 0;
-            }
-            write_data << "Customer Id = " << cus_id << endl;
-            write_data << name << endl;
+        }
+
+        read_data.close();
+        write_data.close();
+
+        remove("customer.txt");
+        rename("customer_update.txt", "customer.txt");
+
+        if (found)
+        {
+            cout << "\n Customer Data Saved In customer_update.txt";
+        }
+        else
+        {
+            cout << "\n Customer Not Found!";
         }
     }
 
-    if (f == 0)
+    if (flag == 2)
     {
-        cout << "\n Data Not Found";
+        cout << "\n Get Lost ..... ";
+    }
+}
+
+// ADDING A CUSTOMER DETAILS
+
+void add_customer_details()
+{
+    admin_check_details();
+
+    write_data.open("customer.txt", ios::app);
+
+    if (!write_data)
+    {
+        cout << "\n File Not Open ";
+        return;
+    }
+
+    if (flag == 1)
+    {
+
+        cout << "\n Enter Emplooye Id ";
+        cin >> cus_id;
+
+        cin.ignore();
+        cout << "\n Enter Customer Full Name ";
+        getline(cin, full_name);
+
+        cout << "\n Enter Customer Mobile Number ";
+        cin >> mobile_number;
+
+        write_data << "Customer ID = " << cus_id << endl;
+        write_data << "Customer Name = " << full_name << endl;
+
+        if (mobile_number < 1000000000 || mobile_number > 9999999999)
+        {
+            cout << "\n Wrong Number Entered By The User";
+            cout << "\n Enter Emplooye Mobile Number ";
+            cin >> mobile_number;
+        }
+
+        else
+        {
+            write_data << "Customer Mobile Number = " << mobile_number << endl;
+        }
+
+        cout << "\n Enter The Updated Account Status (UnBlock , Block )";
+        cin >> status;
+
+        if (status == "Block" || status == "UnBlock")
+        {
+            write_data << status << endl;
+        }
+        else
+        {
+            cout << "\n User Entred Wrong Status ";
+        }
+
+        write_data.close();
+    }
+
+    if (flag == 2)
+    {
+        cout << "\n Get Lost ....";
     }
 }

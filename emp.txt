@@ -1,0 +1,5 @@
+Emplooye ID = 1001
+Emplooye Name = jio
+Emplooye Salary = 43
+Emplooye PF(Provident Fund) = 12
+Emplooye Mobile Number = 1234123124

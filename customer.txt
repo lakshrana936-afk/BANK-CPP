@@ -1,6 +1,13 @@
-Customer Id = 1001
-Customer Name = laksh naresh kumar rana
-Customer Id = 1002
-Customer Name = kop kop
-Customer Id = 1003
-Customer Name = lop
+Customer ID = 1001
+Customer Name = laksh nareshkumar rana
+Customer Mobile Number = 9898898989
+Customer ID = 1002
+Customer Name = iop
+Customer Mobile Number = 4332124342
+Customer ID = 1003
+Customer Name = uio
+Customer Mobile Number = 7878877888
+Customer ID = 1004
+Customer Name = iop
+Customer Mobile Number = 8989989898
+
