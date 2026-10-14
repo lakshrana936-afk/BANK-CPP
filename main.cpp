@@ -787,7 +787,7 @@ void see_total_fund()
             cout << "\n                  Total Balance Of Bank            " << endl;
             cout << "\n ==================================================" << endl;
             cout << "\n |                                                 |" << endl;
-            cout << "\n |         Total Main Balance Of Bank  Fund  =     |" << orignal_fund;
+            cout << "\n |         Total Main Balance Of Bank  Fund  =      " << orignal_fund;
             cout << "\n |                                                 |" << endl;
             found = true;
         }
@@ -796,6 +796,7 @@ void see_total_fund()
     {
         cout << "\n The Total Value Not Found ";
     }
+    read_data.close();
 }
 void report_of_current_year()
 {
@@ -815,6 +816,7 @@ void report_of_current_year()
             orignal_fund = stoi(line.substr(line.find("=") + 1));
         }
     }
+
     cout << "\n";
     cout << "====================================================\n";
     cout << "                   BANK OF XYZ\n";
@@ -846,6 +848,7 @@ void report_of_current_year()
     cout << "\n Total Expenses  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 2000000;
     cout << "\n Net Profit   " << setw(23) << ":" << setw(4) << "RS." << setw(3) << 5000000;
     cout << "\n----------------------------------------------------";
+    read_data.close();
 }
 
 void profit_loss()
@@ -874,7 +877,39 @@ void profit_loss()
         cout << "\n No Profit No Loss";
     }
 
-    cout << "\n Original Fund  : Rs. " << orignal_fund;
+    read_data.open("fund.txt");
+    bool found;
+    if (!read_data)
+    {
+        cout << "\n File Not Open";
+        return;
+    }
+    while (getline(read_data, line))
+    {
 
+        if (line.find("At Time Total Fund  = ") != string::npos)
+        {
+
+            orignal_fund = stoi(line.substr(line.find("=") + 1));
+        }
+    }
+    read_data.open("fund.txt");
+
+    if (!read_data)
+    {
+        cout << "\n File Not Open";
+        return;
+    }
+    while (getline(read_data, line))
+    {
+
+        if (line.find("At Time Total Fund  = ") != string::npos)
+        {
+
+            orignal_fund = stoi(line.substr(line.find("=") + 1));
+        }
+    }
+    cout << "\n Original Fund  : Rs. " << orignal_fund;
+    read_data.close();
     cout << "\n---------------------------------\n";
 }
