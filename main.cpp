@@ -12,6 +12,12 @@ string line, line1;
 int pin, cus_id;
 float amount;
 string full_name, status;
+
+// Financial Part Variables
+
+float money, total = 0, orignal_fund;
+string place;
+
 // FILE MAGMENT SYSTEM
 
 ofstream write_data;
@@ -30,7 +36,11 @@ void update_customer_data();
 // Admin In Financial Report Part
 
 void last_year_report();
-
+void financial_part();
+void add_fund();
+void see_total_fund();
+void report_of_current_year();
+void profit_loss();
 // Admin Main Function Part
 void admin_check_details();
 void show_admin_details_menu();
@@ -60,6 +70,16 @@ public:
         cout << "\n  7. See The Last Year Financial Report";
         cout << "\n  8. Fund Details"; // bija 3 menu baki che banavana 1 report and 2 total 3.Profit And Lost
         cout << "\n  9. Logout";
+    }
+
+    void finanacial_menu()
+    {
+        cout << "\n = = = = MENU OF FINANACE = = = =";
+        cout << "\n         1. Add Fund ";
+        cout << "\n         2. See Total Fund ";
+        cout << "\n         3. Show Current Year Report";
+        cout << "\n         4. See Profit And Lost ";
+        cout << "\n         5. Back To Menu  ";
     }
 };
 class customer
@@ -178,6 +198,10 @@ void show_admin_details_menu()
             case 7:
                 system("cls");
                 last_year_report();
+                break;
+            case 8:
+                system("cls");
+                financial_part();
                 break;
             case 11:
                 system("cls");
@@ -655,24 +679,202 @@ void last_year_report()
         cout << "====================================================\n";
         cout << "\n              BANK SUMMARY\n";
         cout << "----------------------------------------------------\n";
-        cout << "\n Total Customers " << setw(20) << ":" << setw(13) << 12700;
-        cout << "\n Total Employees " << setw(20) << ":" << setw(13) << 500;
-        cout << "\n Total Deposits  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 850000000.00;
-        cout << "\n Total Withdeawals  " << setw(17) << ":" << setw(4) << "RS." << setw(3) << 420000000.00;
-        cout << "\n Total Loans " << setw(24) << ":" << setw(4) << "RS." << setw(3) << 125000000.00;
-        cout << "\n Total Interest Earned " << setw(14) << ":" << setw(4) << "RS." << setw(3) << 35000000.00;
+        cout << "\n Total Customers " << setw(20) << ":" << setw(10) << 12700;
+        cout << "\n Total Employees " << setw(20) << ":" << setw(10) << 500;
+        cout << "\n Total Deposits  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 8500000;
+        cout << "\n Total Withdeawals  " << setw(17) << ":" << setw(4) << "RS." << setw(3) << 4200000;
+        cout << "\n Total Loans " << setw(24) << ":" << setw(4) << "RS." << setw(3) << 1250000;
+        cout << "\n Total Interest Earned " << setw(14) << ":" << setw(4) << "RS." << setw(3) << 3500000;
         cout << "\n ";
         cout << "\n ";
 
         cout << "\n                PROFIT SUMMARY                 ";
         cout << "\n----------------------------------------------------";
-        cout << "\n Total Income  " << setw(22) << ":" << setw(4) << "RS." << setw(3) << 50000000.00;
-        cout << "\n Total Expenses  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 18000000.00;
-        cout << "\n Net Profit   " << setw(23) << ":" << setw(4) << "RS." << setw(3) << 32000000.00;
+        cout << "\n Total Income  " << setw(22) << ":" << setw(4) << "RS." << setw(3) << 500000.00;
+        cout << "\n Total Expenses  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 180000.00;
+        cout << "\n Net Profit   " << setw(23) << ":" << setw(4) << "RS." << setw(3) << 320000.00;
         cout << "\n----------------------------------------------------";
     }
     if (flag == 2)
     {
         cout << "\n Get Lost ......";
     }
+}
+
+void financial_part()
+{
+    admin a1;
+
+    do
+    {
+        a1.finanacial_menu();
+        cout << "\n Enter Your Choice =>";
+        cin >> ch;
+        switch (ch)
+        {
+        case 1:
+            system("cls");
+            add_fund();
+            break;
+        case 2:
+            system("cls");
+            see_total_fund();
+            break;
+        case 3:
+            system("cls");
+            report_of_current_year();
+            break;
+        case 4:
+            system("cls");
+            profit_loss();
+            break;
+        case 5:
+            system("cls");
+            cout << "\n Back To Main Menu ";
+            break;
+        default:
+            system("cls");
+            cout << "\n Invalide Choice ";
+            break;
+        }
+
+    } while (ch != 5);
+}
+
+void add_fund()
+{
+    write_data.open("fund.txt", ios::app);
+
+    if (!write_data)
+    {
+        cout << "\n File Not Open ";
+        return;
+    }
+    cout << "\n Enter The Sector Of Fund (Ex Loan) : - ";
+    cin.ignore();
+    cin >> place;
+    cout << "\n Enter The Amount Of Fund : - ";
+    cin >> money;
+
+    total += money;
+
+    write_data << "Fund Sector         = " << place << endl;
+    write_data << "Fund Amount         = " << money << endl;
+    write_data << "At Time Total Fund  = " << total << endl;
+
+    write_data.close();
+}
+
+void see_total_fund()
+{
+    read_data.open("fund.txt");
+    bool found = false;
+    if (!read_data)
+    {
+        cout << "\n File Not Open";
+        return;
+    }
+
+    while (getline(read_data, line))
+    {
+
+        if (line.find("At Time Total Fund  = ") != string::npos)
+        {
+
+            orignal_fund = stoi(line.substr(line.find("=") + 1));
+
+            cout << "\n ==================================================" << endl;
+            cout << "\n                  Total Balance Of Bank            " << endl;
+            cout << "\n ==================================================" << endl;
+            cout << "\n |                                                 |" << endl;
+            cout << "\n |         Total Main Balance Of Bank  Fund  =     |" << orignal_fund;
+            cout << "\n |                                                 |" << endl;
+            found = true;
+        }
+    }
+    if (found == false)
+    {
+        cout << "\n The Total Value Not Found ";
+    }
+}
+void report_of_current_year()
+{
+    read_data.open("fund.txt");
+    bool found;
+    if (!read_data)
+    {
+        cout << "\n File Not Open";
+        return;
+    }
+    while (getline(read_data, line))
+    {
+
+        if (line.find("At Time Total Fund  = ") != string::npos)
+        {
+
+            orignal_fund = stoi(line.substr(line.find("=") + 1));
+        }
+    }
+    cout << "\n";
+    cout << "====================================================\n";
+    cout << "                   BANK OF XYZ\n";
+    cout << "           FINANCIAL REPORT OF CUREENT YEAR\n";
+    cout << "====================================================\n";
+    cout << "\n              BANK SUMMARY\n";
+    cout << "----------------------------------------------------\n";
+    cout << "\n Total Customers " << setw(20) << ":" << setw(11) << 13000;
+    cout << "\n Total Employees " << setw(20) << ":" << setw(11) << 550;
+    cout << "\n Total Deposits  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 95000000;
+    cout << "\n Total Withdeawals  " << setw(17) << ":" << setw(4) << "RS." << setw(3) << 40000000;
+    cout << "\n Total Loans " << setw(24) << ":" << setw(4) << "RS." << setw(3) << 13500000;
+    cout << "\n Total Interest Earned " << setw(14) << ":" << setw(4) << "RS." << setw(3) << 3700000;
+    cout << "\n ";
+    cout << "\n ";
+    cout << "\n====================================================\n";
+    cout << "\n                TOTAL  FUND IN BANK DETAIlS        \n";
+    cout << "\n====================================================\n";
+    cout << "\n|" << setw(50) << "|";
+    cout << "\n|  Total Fund Today" << setw(20) << ": " << orignal_fund << setw(11);
+    cout << "\n|" << setw(50) << "|";
+    cout << "\n ";
+    cout << "\n====================================================";
+    cout << "\n ";
+    cout << "\n----------------------------------------------------";
+    cout << "\n                PROFIT SUMMARY                 ";
+    cout << "\n----------------------------------------------------";
+    cout << "\n Total Income  " << setw(22) << ":" << setw(4) << "RS." << setw(3) << 7000000;
+    cout << "\n Total Expenses  " << setw(20) << ":" << setw(4) << "RS." << setw(3) << 2000000;
+    cout << "\n Net Profit   " << setw(23) << ":" << setw(4) << "RS." << setw(3) << 5000000;
+    cout << "\n----------------------------------------------------";
+}
+
+void profit_loss()
+{
+    int income = 7000000;
+    int expenses = 2000000;
+    int profit_loss;
+
+    profit_loss = income - expenses;
+
+    cout << "\n--------- PROFIT & LOSS ---------\n";
+
+    cout << "\n Total Income   : Rs. " << income;
+    cout << "\n Total Expenses : Rs. " << expenses;
+
+    if (profit_loss > 0)
+    {
+        cout << "\n Total Profit   : Rs. " << profit_loss;
+    }
+    else if (profit_loss < 0)
+    {
+        cout << "\n Total Loss     : Rs. " << profit_loss;
+    }
+    else
+    {
+        cout << "\n No Profit No Loss";
+    }
+
+    cout << "\n Original Fund  : Rs. " << orignal_fund;
+
+    cout << "\n---------------------------------\n";
 }
