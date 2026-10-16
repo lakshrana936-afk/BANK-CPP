@@ -7,21 +7,21 @@ float salary, pf;
 long long int mobile_number;
 string line, line1;
 
+// FILE MAGMENT SYSTEM
+
+ofstream write_data;
+ifstream read_data;
+
 // CUSTOMER PART VARIABLES
 
 int pin, cus_id;
 float amount;
 string full_name, status;
-
+long long int account_number;
 // Financial Part Variables
 
 float money, total = 0, orignal_fund;
 string place;
-
-// FILE MAGMENT SYSTEM
-
-ofstream write_data;
-ifstream read_data;
 
 // Admin In Emp show Details And Add Function
 void show_emp_details();
@@ -45,9 +45,15 @@ void profit_loss();
 void admin_check_details();
 void show_admin_details_menu();
 
+// EMPLOOYE PART
+
+void emp_menu();
+
 // CUSTOMER PART
 
+void emp_switch_part();
 void add_customer_details();
+void search_customer_account();
 
 class admin
 {
@@ -87,6 +93,30 @@ class customer
 };
 class emp
 {
+private:
+    string name = "emp";
+    int pin = 12345;
+
+public:
+    string n = name, nam;
+    int p = pin, pas;
+    bool flag = false;
+    void emp_checking()
+    {
+        cout << "\n Enter Your User Name ";
+        cin >> nam;
+        cout << "\n Enter Your PIN ";
+        cin >> pas;
+
+        if (nam == n && p == pas)
+        {
+            flag = true;
+        }
+        else
+        {
+            cout << "\n Get Lost ... ";
+        }
+    }
 };
 void main_menu()
 {
@@ -99,7 +129,7 @@ void main_menu()
 
 int main()
 {
-
+    emp e1;
     int ch, ch2;
 
     do
@@ -112,6 +142,10 @@ int main()
         case 1:
             system("cls");
             show_admin_details_menu();
+            break;
+        case 2:
+            system("cls");
+            emp_switch_part();
             break;
 
         default:
@@ -516,10 +550,9 @@ void update_customer_data()
                     cout << "\n " << name;
                     cout << "\n " << mobile_line;
 
-                    cout << "\n 1. Update Customer ID";
-                    cout << "\n 2. Update Customer Name";
-                    cout << "\n 3. Update Customer Mobile Number";
-                    cout << "\n 4. Update Customer Account Status";
+                    cout << "\n 1. Update Customer Name";
+                    cout << "\n 2. Update Customer Mobile Number";
+                    cout << "\n 3. Update Customer Account Status";
                     cout << "\n Enter Your Choice: ";
                     cin >> choice;
 
@@ -619,9 +652,17 @@ void add_customer_details()
     if (flag == 1)
     {
 
-        cout << "\n Enter Emplooye Id ";
-        cin >> cus_id;
-
+        cout << "\n Enter Customer Account Number(10 Digit ) ";
+        cin >> account_number;
+        if (account_number < 1000000000 || account_number > 9999999999)
+        {
+            cout << "\n Enter Customer Account Number ";
+            cin >> account_number;
+        }
+        else
+        {
+            write_data << "Account Number = " << account_number << endl;
+        }
         cin.ignore();
         cout << "\n Enter Customer Full Name ";
         getline(cin, full_name);
@@ -629,8 +670,11 @@ void add_customer_details()
         cout << "\n Enter Customer Mobile Number ";
         cin >> mobile_number;
 
-        write_data << "Customer ID = " << cus_id << endl;
+        cout << "\n Enter Customer Amount ";
+        cin >> amount;
+
         write_data << "Customer Name = " << full_name << endl;
+        write_data << "Customer Amount = " << amount << endl;
 
         if (mobile_number < 1000000000 || mobile_number > 9999999999)
         {
@@ -649,7 +693,7 @@ void add_customer_details()
 
         if (status == "Block" || status == "UnBlock")
         {
-            write_data << status << endl;
+            write_data << "Account Status = " << status << endl;
         }
         else
         {
@@ -912,4 +956,86 @@ void profit_loss()
     cout << "\n Original Fund  : Rs. " << orignal_fund;
     read_data.close();
     cout << "\n---------------------------------\n";
+}
+
+//  EMPLOYEE PART
+void emp_menu()
+{
+
+    cout << "\n = = = = EMPLOOYE MENU = = = = ";
+    cout << "\n         1. Add New Account ";
+    cout << "\n         2. Display All Acount ";
+    cout << "\n         3. Search Account ";
+    cout << "\n         4. Credit Amount ";
+    cout << "\n         5. Withraw Amount ";
+    cout << "\n         6. Update Account ";
+    cout << "\n         7. Delete Account ";
+    cout << "\n         8. Logout ";
+}
+
+void emp_switch_part()
+{
+    do
+    {
+        emp_menu();
+        cout << "\n Enter Your Choice ";
+        cin >> ch;
+        switch (ch)
+        {
+        case 1:
+            add_customer_details();
+            break;
+        case 2:
+            show_all_customer_data();
+            break;
+        case 3:
+            search_customer_account();
+            break;
+        default:
+            cout << "\n Invalide Choice ";
+            break;
+        }
+    } while (ch != 8);
+}
+
+void search_customer_account()
+{
+    string name, mobile_line, c_amount;
+    long long int ac, an;
+    // int am;
+    // float am;
+    read_data.open("customer.txt", ios::in);
+
+    if (!read_data)
+    {
+        cout << "\n File Not Open";
+        return;
+    }
+
+    cout << "\n Enter Your Account Number ";
+    cin >> an;
+
+    while (getline(read_data, line))
+    {
+        if (line.find("Account Number = ") != string::npos)
+        {
+            ac = stoll(line.substr(line.find("=") + 1));
+            if (ac == an)
+            {
+                getline(read_data, name);
+                getline(read_data, mobile_line);
+                getline(read_data, c_amount);
+                getline(read_data, status);
+
+                cout << "\n DISPLAY THE CUSTOMER DATA  " << endl;
+                cout << "\n Customer Account Number = " << ac << endl;
+                cout << name << endl;
+                cout << mobile_line << endl;
+                cout << c_amount << endl;
+                cout << status << endl;
+            }
+        }
+    }
+
+    read_data.close();
 }
