@@ -54,7 +54,7 @@ void emp_menu();
 void emp_switch_part();
 void add_customer_details();
 void search_customer_account();
-
+void delete_customer();
 class admin
 {
 private:
@@ -966,11 +966,9 @@ void emp_menu()
     cout << "\n         1. Add New Account ";
     cout << "\n         2. Display All Acount ";
     cout << "\n         3. Search Account ";
-    cout << "\n         4. Credit Amount ";
-    cout << "\n         5. Withraw Amount ";
-    cout << "\n         6. Update Account ";
-    cout << "\n         7. Delete Account ";
-    cout << "\n         8. Logout ";
+    cout << "\n         4. Update Account ";
+    cout << "\n         5. Delete Account ";
+    cout << "\n         6. Logout ";
 }
 
 void emp_switch_part()
@@ -983,19 +981,35 @@ void emp_switch_part()
         switch (ch)
         {
         case 1:
+            system("cls");
             add_customer_details();
             break;
         case 2:
+            system("cls");
             show_all_customer_data();
             break;
         case 3:
+            system("cls");
             search_customer_account();
             break;
+        case 4:
+            system("cls");
+            update_customer_data();
+            break;
+        case 5:
+            system("cls");
+            delete_customer();
+            break;
+        case 6:
+            system("cls");
+            cout << "\n Back To The Main Menu " << endl;
+            break;
         default:
+            system("cls");
             cout << "\n Invalide Choice ";
             break;
         }
-    } while (ch != 8);
+    } while (ch != 6);
 }
 
 void search_customer_account()
@@ -1038,4 +1052,58 @@ void search_customer_account()
     }
 
     read_data.close();
+}
+
+void delete_customer()
+{
+    long long int acc, accn;
+    string mobile_line, c_amount;
+    bool found = false;
+    read_data.open("customer.txt", ios::in);
+    write_data.open("customer_updated.txt", ios::app);
+    if (!read_data || !write_data)
+    {
+        cout << "\n File Not Open";
+        return;
+    }
+
+    cout << "\n Enter Customer Account Number ";
+    cin >> acc;
+    while (getline(read_data, line))
+    {
+
+        if (line.find("Customer Amount = ") != string::npos)
+        {
+            accn = stoll(line.substr(line.find("=") + 1));
+            getline(read_data, full_name);
+            getline(read_data, mobile_line);
+            getline(read_data, c_amount);
+            getline(read_data, status);
+            if (acc != accn)
+            {
+                write_data << line;
+                write_data << full_name;
+                write_data << c_amount;
+                write_data << status;
+            }
+            else
+            {
+                cout << "\n CUSTOMER DATA FOUND ";
+                cout << line;
+                cout << full_name;
+                cout << mobile_line;
+                cout << c_amount;
+                cout << status;
+                found = true;
+            }
+        }
+    }
+    if (found == false)
+    {
+        cout << "\n Data Not Found In Data Base";
+    }
+    write_data.close();
+    read_data.close();
+    remove("customer.txt");
+    rename("customer_updated.txt", "customer.txt");
 }
