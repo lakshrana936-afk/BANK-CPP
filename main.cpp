@@ -55,6 +55,7 @@ void emp_switch_part();
 void add_customer_details();
 void search_customer_account();
 void delete_customer();
+
 class admin
 {
 private:
@@ -90,6 +91,15 @@ public:
 };
 class customer
 {
+public:
+    void customer_field_menu()
+    {
+        cout << "\n = = = = WELCOME TO CUSTOMER MENU = = = = ";
+        cout << "\n         1. Show My Account ";
+        cout << "\n         2. Credit Money ";
+        cout << "\n         3. Withrawal Money";
+        cout << "\n         4. Logout ";
+    }
 };
 class emp
 {
@@ -1106,4 +1116,70 @@ void delete_customer()
     read_data.close();
     remove("customer.txt");
     rename("customer_updated.txt", "customer.txt");
+}
+
+// customer part here to start
+void switch_part_of_cusstomer()
+{
+    customer c1;
+    do
+    {
+        c1.customer_field_menu();
+        cout<<"\n Enter Your Choice ";
+        cin>>ch;
+
+        switch (ch)
+        {
+        case 1:
+            show_my_details();
+            break;
+        
+        default:
+            cout<<"\n Inavalide Choice ";
+            break;
+        }
+        
+    } while (ch!=5);
+    
+}
+void show_my_details()
+{
+    string name, mobile_line, c_amount;
+    long long int ac, an;
+    // int am;
+    // float am;
+    read_data.open("customer.txt", ios::in);
+
+    if (!read_data)
+    {
+        cout << "\n File Not Open";
+        return;
+    }
+
+    cout << "\n Enter Your Account Number ";
+    cin >> an;
+
+    while (getline(read_data, line))
+    {
+        if (line.find("Account Number = ") != string::npos)
+        {
+            ac = stoll(line.substr(line.find("=") + 1));
+            if (ac == an)
+            {
+                getline(read_data, name);
+                getline(read_data, mobile_line);
+                getline(read_data, c_amount);
+                getline(read_data, status);
+
+                cout << "\n DISPLAY THE CUSTOMER DATA  " << endl;
+                cout << "\n Customer Account Number = " << ac << endl;
+                cout << name << endl;
+                cout << mobile_line << endl;
+                cout << c_amount << endl;
+                cout << status << endl;
+            }
+        }
+    }
+
+    read_data.close();
 }
