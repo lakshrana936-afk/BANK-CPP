@@ -9,10 +9,6 @@ string line, line1;
 
 // GLOBAL VARIABLE DECLARATION
 
-emp e1;
-admin a1;
-customer c1;
-
 // FILE MANAGMENT PART
 ofstream write_data;
 ifstream read_data;
@@ -41,26 +37,37 @@ public:
     int pass_word = password;
     void admin_menu()
     {
-        cout << "\n ==== WELCOME  TO  ADMIN  MENU ====";
-        cout << "\n  1. Add Employee ";
-        cout << "\n  2. See All Employee Details ";
-        cout << "\n  3. Search Employee ";
-        cout << "\n  4. Delete Employee";
-        cout << "\n  5. See All Customer Details ";
-        cout << "\n  6. Update Customer Data";
-        cout << "\n  7. See The Last Year Financial Report";
-        cout << "\n  8. Fund Details"; // bija 3 menu baki che banavana 1 report and 2 total 3.Profit And Lost
-        cout << "\n  9. Logout";
+        cout << "\n";
+        cout << "==============================================\n";
+        cout << "              BANK OF BARODA\n";
+        cout << "                 ADMIN MENU\n";
+        cout << "==============================================\n";
+        cout << "  1. Add Employee\n";
+        cout << "  2. See All Employee Details\n";
+        cout << "  3. Search Employee\n";
+        cout << "  4. Delete Employee\n";
+        cout << "  5. See All Customer Details\n";
+        cout << "  6. Update Customer Data\n";
+        cout << "  7. See Last Year Financial Report\n";
+        cout << "  8. Fund Details\n";
+        cout << "  9. Logout\n";
+        cout << "  10. Exit\n";
+        cout << "==============================================\n";
     }
 
     void finanacial_menu()
     {
-        cout << "\n = = = = MENU OF FINANACE = = = =";
-        cout << "\n         1. Add Fund ";
-        cout << "\n         2. See Total Fund ";
-        cout << "\n         3. Show Current Year Report";
-        cout << "\n         4. See Profit And Lost ";
-        cout << "\n         5. Back To Menu  ";
+        cout << "\n";
+        cout << "==============================================\n";
+        cout << "                FINANCE MENU\n";
+        cout << "==============================================\n";
+        cout << "  1. Add Fund\n";
+        cout << "  2. See Total Fund\n";
+        cout << "  3. Show Current Year Report\n";
+        cout << "  4. See Profit And Loss\n";
+        cout << "  5. Back To Menu\n";
+        cout << "  6. Exit";
+        cout << "==============================================\n";
     }
 
     void admin_check_details()
@@ -85,6 +92,7 @@ public:
         }
     }
 
+    void show_admin_details_menu();
     void show_emp_details();
     void add_emp_details();
     void search_emp();
@@ -101,11 +109,17 @@ class customer
 public:
     void customer_field_menu()
     {
-        cout << "\n = = = = WELCOME TO CUSTOMER MENU = = = = ";
-        cout << "\n         1. Show My Account ";
-        cout << "\n         2. Credit Money ";
-        cout << "\n         3. Withrawal Money";
-        cout << "\n         4. Logout ";
+        cout << "\n";
+        cout << "==============================================\n";
+        cout << "              BANK OF BARODA\n";
+        cout << "               CUSTOMER MENU\n";
+        cout << "==============================================\n";
+        cout << "  1. Show My Account\n";
+        cout << "  2. Credit Money\n";
+        cout << "  3. Withdrawal Money\n";
+        cout << "  4. Logout";
+        cout << "  5. Exit";
+        cout << "==============================================\n";
     }
 
     void show_my_details();
@@ -143,13 +157,23 @@ public:
     void search_customer_account();
     void delete_customer();
 };
+
+emp e1;
+admin a1;
+customer c1;
+
 void main_menu()
 {
-    cout << "\n WELCOME TO BANK OF BARODA";
-    cout << "\n       1. Admin ";
-    cout << "\n       2. Employee";
-    cout << "\n       3. Customer ";
-    cout << "\n       4. Exit...";
+    cout << "\n";
+    cout << "==============================================\n";
+    cout << "              BANK OF BARODA\n";
+    cout << "          BANKING MANAGEMENT SYSTEM\n";
+    cout << "==============================================\n";
+    cout << "  1. Admin Login\n";
+    cout << "  2. Employee Menu\n";
+    cout << "  3. Customer Menu\n";
+    cout << "  4. Exit\n";
+    cout << "==============================================\n";
 }
 
 int main()
@@ -159,6 +183,7 @@ int main()
 
     do
     {
+        system("cls");
         main_menu();
         cout << "\n Enter Your Choice ";
         cin >> ch;
@@ -166,7 +191,7 @@ int main()
         {
         case 1:
             system("cls");
-            show_admin_details_menu();
+            a1.show_admin_details_menu();
             break;
         case 2:
             system("cls");
@@ -176,6 +201,9 @@ int main()
             system("cls");
             switch_part_of_customer();
             break;
+        case 4:
+            system("cls");
+            cout << "\n THANK YOU FOR VISITIONG";
         default:
             cout << "\n Invalide Choice ";
             break;
@@ -188,7 +216,7 @@ int main()
 
 // It Is A Admin Part
 
-void show_admin_details_menu()
+void admin::show_admin_details_menu()
 {
     admin a1;
     customer c1;
@@ -243,15 +271,19 @@ void show_admin_details_menu()
                 system("cls");
                 a1.financial_part();
                 break;
-            case 11:
+            case 9:
                 system("cls");
                 cout << "\n BACK TO MAIN MENU ";
+                break;
+            case 10:
+                system("cls");
+                cout << "\n TANK YOU FOR VISITING";
                 break;
             default:
                 cout << "\n Invalide Choice ";
                 break;
             }
-        } while (ch != 11);
+        } while (ch != 10);
     }
     else
     {
@@ -788,6 +820,10 @@ void admin::financial_part()
             system("cls");
             cout << "\n Back To Main Menu ";
             break;
+        case 6:
+            system("cls");
+            cout << "\n TANK YOU FOR VISITING";
+
         default:
             system("cls");
             cout << "\n Invalide Choice ";
@@ -973,17 +1009,20 @@ void admin::profit_loss()
 //  EMPLOYEE PART
 void emp_menu()
 {
-
-    cout << "\n = = = = EMPLOOYE MENU = = = = ";
-    cout << "\n         1. Add New Account ";
-    cout << "\n         2. Display All Acount ";
-    cout << "\n         3. Search Account ";
-    cout << "\n         4. Update Account ";
-    cout << "\n         5. Delete Account ";
-    cout << "\n         6. Logout ";
+    cout << "\n";
+    cout << "==============================================\n";
+    cout << "              BANK OF BARODA\n";
+    cout << "               EMPLOYEE MENU\n";
+    cout << "==============================================\n";
+    cout << "  1. Add New Account\n";
+    cout << "  2. Display All Accounts\n";
+    cout << "  3. Search Account\n";
+    cout << "  4. Update Account\n";
+    cout << "  5. Delete Account\n";
+    cout << "  6. Logout\n";
+    cout << "  7. Exit";
+    cout << "==============================================\n";
 }
-
-// BAKI CHE AHITHI BATHA FUNCTION NE EMP_SWITCH PART MA MUKVANA
 
 void emp_switch_part()
 {
@@ -1019,12 +1058,16 @@ void emp_switch_part()
             system("cls");
             cout << "\n Back To The Main Menu " << endl;
             break;
+        case 7:
+            system("cls");
+            cout << "\n TANK YOU FOR VISITING";
+            break;
         default:
             system("cls");
             cout << "\n Invalide Choice ";
             break;
         }
-    } while (ch != 6);
+    } while (ch != 7);
 }
 
 void emp::search_customer_account()
@@ -1158,6 +1201,10 @@ void switch_part_of_customer()
             system("cls");
             cout << "\n Back To The Main Menu ";
             break;
+        case 5:
+            system("cls");
+            cout << "\n TANK YOU FOR VISITING";
+            break;
         default:
             system("cls");
             cout << "\n Inavalide Choice ";
@@ -1166,7 +1213,7 @@ void switch_part_of_customer()
 
     } while (ch != 5);
 }
-void customer :: show_my_details()
+void customer::show_my_details()
 {
     string name, mobile_line, c_amount, pin;
     long long int ac, an;
@@ -1208,7 +1255,7 @@ void customer :: show_my_details()
     read_data.close();
 }
 
-void customer :: credit_amount()
+void customer::credit_amount()
 {
     string name, mobile_line, amount_line, status_line, pin_line;
     long long int acn, ac;
@@ -1299,7 +1346,7 @@ void customer :: credit_amount()
     }
 }
 
-void customer :: withrawal_amount()
+void customer::withrawal_amount()
 {
     string name, mobile_line, amount_line, status_line, pin_line;
     long long int acn, ac;
