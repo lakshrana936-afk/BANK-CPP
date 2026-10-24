@@ -13,12 +13,12 @@ string line, line1;
 ofstream write_data;
 ifstream read_data;
 
-int pin, cus_id;
+int pin, cus_id, total;
 float amount;
 string full_name, status;
 long long int account_number;
 
-float money, total = 0, orignal_fund;
+float money, orignal_fund;
 string place;
 
 void show_all_customer_data();
@@ -52,7 +52,7 @@ public:
         cout << "  8. Fund Details\n";
         cout << "  9. Logout\n";
         cout << "  10. Exit\n";
-        cout << "==============================================\n";
+        cout << "\n==============================================\n";
     }
 
     void finanacial_menu()
@@ -66,8 +66,8 @@ public:
         cout << "  3. Show Current Year Report\n";
         cout << "  4. See Profit And Loss\n";
         cout << "  5. Back To Menu\n";
-        cout << "  6. Exit";
-        cout << "==============================================\n";
+        cout << "  6. Exit\n";
+        cout << "\n==============================================\n";
     }
 
     void admin_check_details()
@@ -117,8 +117,8 @@ public:
         cout << "  1. Show My Account\n";
         cout << "  2. Credit Money\n";
         cout << "  3. Withdrawal Money\n";
-        cout << "  4. Logout";
-        cout << "  5. Exit";
+        cout << "  4. Logout\n";
+        cout << "  5. Exit\n";
         cout << "==============================================\n";
     }
 
@@ -173,7 +173,7 @@ void main_menu()
     cout << "  2. Employee Menu\n";
     cout << "  3. Customer Menu\n";
     cout << "  4. Exit\n";
-    cout << "==============================================\n";
+    cout << "\n==============================================\n";
 }
 
 int main()
@@ -649,6 +649,7 @@ void update_customer_data()
                 write_data << amount_line << endl;
                 write_data << mobile_line << endl;
                 write_data << status_line << endl;
+                write_data << pin_line << endl;
             }
         }
 
@@ -660,7 +661,7 @@ void update_customer_data()
 
         if (found)
         {
-            cout << "\n Customer Data Saved In customer_update.txt";
+            return;
         }
         else
         {
@@ -739,7 +740,7 @@ void emp::add_customer_details()
             cout << "\n User Entred Wrong Status ";
         }
 
-        cout << "\n Enter Your Transaction ";
+        cout << "\n Enter Your Transaction PIN ";
         cin >> pin;
 
         write_data << "Customer Transaction PIN = " << pin << endl;
@@ -911,7 +912,7 @@ void admin::report_of_current_year()
 
     cout << "\n";
     cout << "====================================================\n";
-    cout << "                   BANK OF XYZ\n";
+    cout << "                   BANK OF BANK OF BARODA\n";
     cout << "           FINANCIAL REPORT OF CUREENT YEAR\n";
     cout << "====================================================\n";
     cout << "\n              BANK SUMMARY\n";
@@ -1021,7 +1022,7 @@ void emp_menu()
     cout << "  5. Delete Account\n";
     cout << "  6. Logout\n";
     cout << "  7. Exit";
-    cout << "==============================================\n";
+    cout << "\n==============================================\n";
 }
 
 void emp_switch_part()
@@ -1144,21 +1145,21 @@ void emp::delete_customer()
             getline(read_data, pin);
             if (acc != accn)
             {
-                write_data << line;
-                write_data << full_name;
-                write_data << c_amount;
-                write_data << status;
-                write_data << pin;
+                write_data << line << endl;
+                write_data << full_name << endl;
+                write_data << c_amount << endl;
+                write_data << status << endl;
+                write_data << pin << endl;
             }
             else
             {
                 cout << "\n CUSTOMER DATA FOUND ";
-                cout << line;
-                cout << full_name;
-                cout << mobile_line;
-                cout << c_amount;
-                cout << status;
-                cout << pin;
+                cout << line << endl;
+                cout << full_name << endl;
+                cout << mobile_line << endl;
+                cout << c_amount << endl;
+                cout << status << endl;
+                cout << pin << endl;
                 found = true;
             }
         }
@@ -1255,12 +1256,13 @@ void customer::show_my_details()
     read_data.close();
 }
 
+
 void customer::credit_amount()
 {
     string name, mobile_line, amount_line, status_line, pin_line;
     long long int acn, ac;
     int old_amount, credit, user_pin, old_pin;
-    bool found = false;
+    bool found = false, updated = false;
 
     cout << "\n Enter Your Account Number: ";
     cin >> acn;
@@ -1278,6 +1280,7 @@ void customer::credit_amount()
         if (write_data.is_open())
             write_data.close();
 
+        remove("temp.txt");
         return;
     }
 
@@ -1292,6 +1295,7 @@ void customer::credit_amount()
             getline(read_data, mobile_line);
             getline(read_data, status_line);
             getline(read_data, pin_line);
+
             if (ac == acn)
             {
                 found = true;
@@ -1302,22 +1306,44 @@ void customer::credit_amount()
                 cout << "\n " << amount_line;
                 cout << "\n " << mobile_line;
                 cout << "\n " << status_line;
-                cout << "\n " << pin_line;
-                old_amount = stof(amount_line.substr(amount_line.find("=") + 1));
-                old_pin = stoi(pin_line.substr(pin_line.find("=") + 1));
-                cout << "\n Enter Your Transaction PIN";
-                cin >> user_pin;
-                if (pin == user_pin)
+
+                if (status_line == "Account Status = Block")
                 {
-                    cout << "\n Enter Your Amount You Want To Credit: ";
-                    cin >> credit;
+                    cout << "\n Your Account Is Blocked!";
+                }
+                else
+                {
+                    old_amount = stoi(amount_line.substr(amount_line.find("=") + 1));
+                    old_pin = stoi(pin_line.substr(pin_line.find("=") + 1));
 
-                    old_amount = old_amount + credit;
+                    cout << "\n Enter Your Transaction PIN: ";
+                    cin >> user_pin;
 
-                    amount_line = "Customer Amount = " + to_string(old_amount);
+                    if (old_pin == user_pin)
+                    {
+                        cout << "\n Enter Amount You Want To Credit: ";
+                        cin >> credit;
 
-                    cout << "\n Amount Credited Successfully!";
-                    cout << "\n Updated Balance = " << old_amount;
+                        if (credit > 0)
+                        {
+                            old_amount = old_amount + credit;
+
+                            amount_line = "Customer Amount = " + to_string(old_amount);
+
+                            cout << "\n Amount Credited Successfully!";
+                            cout << "\n Updated Balance = " << old_amount;
+
+                            updated = true;
+                        }
+                        else
+                        {
+                            cout << "\n Please Enter Valid Amount!";
+                        }
+                    }
+                    else
+                    {
+                        cout << "\n Incorrect Transaction PIN!";
+                    }
                 }
             }
 
@@ -1326,6 +1352,7 @@ void customer::credit_amount()
             write_data << amount_line << endl;
             write_data << mobile_line << endl;
             write_data << status_line << endl;
+            write_data << pin_line << endl;
         }
     }
 
@@ -1334,10 +1361,17 @@ void customer::credit_amount()
 
     if (found == true)
     {
-        remove("customer.txt");
-        rename("temp.txt", "customer.txt");
+        if (updated == true)
+        {
+            remove("customer.txt");
+            rename("temp.txt", "customer.txt");
 
-        cout << "\n Customer Data Saved Successfully!";
+            cout << "\n Customer Data Saved Successfully!";
+        }
+        else
+        {
+            remove("temp.txt");
+        }
     }
     else
     {
@@ -1346,12 +1380,14 @@ void customer::credit_amount()
     }
 }
 
+
+
 void customer::withrawal_amount()
 {
     string name, mobile_line, amount_line, status_line, pin_line;
     long long int acn, ac;
     int old_amount, debit, user_pin, old_pin;
-    bool found = false;
+    bool found = false, updated = false;
 
     cout << "\n Enter Your Account Number: ";
     cin >> acn;
@@ -1369,6 +1405,7 @@ void customer::withrawal_amount()
         if (write_data.is_open())
             write_data.close();
 
+        remove("temp.txt");
         return;
     }
 
@@ -1394,23 +1431,51 @@ void customer::withrawal_amount()
                 cout << "\n " << amount_line;
                 cout << "\n " << mobile_line;
                 cout << "\n " << status_line;
-                cout << "\n " << pin_line;
-                old_amount = stof(amount_line.substr(amount_line.find("=") + 1));
-                old_pin = stoi(pin_line.substr(pin_line.find("=") + 1));
 
-                cout << "\n Enter Your Transaction PIN";
-                cin >> user_pin;
-                if (pin == user_pin)
+                if (status_line == "Account Status = Block")
                 {
-                    cout << "\n Enter Your Amount You Want To Debit : ";
-                    cin >> debit;
+                    cout << "\n Your Account Is Blocked!";
+                }
+                else
+                {
+                    old_amount = stoi(amount_line.substr(amount_line.find("=") + 1));
+                    old_pin = stoi(pin_line.substr(pin_line.find("=") + 1));
 
-                    old_amount = old_amount - debit;
+                    cout << "\n Enter Your Transaction PIN: ";
+                    cin >> user_pin;
 
-                    amount_line = "Customer Amount = " + to_string(old_amount);
+                    if (old_pin == user_pin)
+                    {
+                        cout << "\n Enter Amount You Want To Debit: ";
+                        cin >> debit;
 
-                    cout << "\n Amount Debited Successfully!";
-                    cout << "\n Updated Balance = " << old_amount;
+                        if (debit > 0)
+                        {
+                            if (debit <= old_amount)
+                            {
+                                old_amount = old_amount - debit;
+
+                                amount_line = "Customer Amount = " + to_string(old_amount);
+
+                                cout << "\n Amount Debited Successfully!";
+                                cout << "\n Updated Balance = " << old_amount;
+
+                                updated = true;
+                            }
+                            else
+                            {
+                                cout << "\n Insufficient Balance!";
+                            }
+                        }
+                        else
+                        {
+                            cout << "\n Please Enter Valid Amount!";
+                        }
+                    }
+                    else
+                    {
+                        cout << "\n Incorrect Transaction PIN!";
+                    }
                 }
             }
 
@@ -1419,6 +1484,7 @@ void customer::withrawal_amount()
             write_data << amount_line << endl;
             write_data << mobile_line << endl;
             write_data << status_line << endl;
+            write_data << pin_line << endl;
         }
     }
 
@@ -1427,10 +1493,17 @@ void customer::withrawal_amount()
 
     if (found == true)
     {
-        remove("customer.txt");
-        rename("temp.txt", "customer.txt");
+        if (updated == true)
+        {
+            remove("customer.txt");
+            rename("temp.txt", "customer.txt");
 
-        cout << "\n Customer Data Saved Successfully!";
+            cout << "\n Customer Data Saved Successfully!";
+        }
+        else
+        {
+            remove("temp.txt");
+        }
     }
     else
     {
